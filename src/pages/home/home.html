@@ -1,0 +1,79 @@
+<ion-header>
+  <ion-navbar color="vibrant">
+    <ion-title>BMusic Player</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+      <div class="spinner-cont" *ngIf="showLoader">
+        <ion-spinner name="circles"></ion-spinner>
+      </div>
+      
+      <section id="playstation" class="row justify-content-center align-items-center">
+        <div id="controlpanel col">
+          
+          <div class="player" [ngClass]="player.paused?'paused': 'playing'">
+            <div class="album">
+              <div class="cover">
+                <div><img [src]="currentContext ? currentContext.image : defaultImg " alt=""></div>
+              </div>
+            </div>
+          </div>
+          <!-- <div id="songpro" class="inlineblo" [style.background-image] = "currentContext ? 'url(' + currentContext.image + ')':'url(' + defaultImg + ')'"   ></div> -->
+          
+        </div>
+      </section>    
+    <div class="content">
+      <p class="text-ios-light text-center" *ngIf="_fileList.length>0"><marquee scrollamount="6"
+        direction="left"
+        behavior="scroll">{{getCurrentSongName()}}</marquee></p>
+    </div>
+    
+    <div class="footer">
+      <div class="row justify-content-center align-items-center">
+        <div class="col-8">
+            <!-- <button ion-button round large color="vibrant" (click)="play()">
+              <ion-icon class="2x" color="light" [name]="playIcon" ></ion-icon>
+            </button> -->
+            <div id="backward" class="inlineblo">
+              <button ion-button clear color="white" (click)="back()">
+                  <ion-icon name="skip-backward" color="white"></ion-icon>
+                </button>
+            </div>
+            <ion-fab >
+                <button color="vibrant" ion-fab (click)="play()"><ion-icon color="white" [name]="player.paused?'play': 'pause'"></ion-icon></button>
+            </ion-fab>
+            <div id="forward" class="inlineblo">
+              <button ion-button clear color="white" (click)="front()">
+                  <ion-icon name="skip-forward" color="white"></ion-icon>
+                </button>
+            </div>
+
+        </div>
+      </div>
+      
+      <div class="row justify-content-center align-items-center  no-gutters">
+        <div class="col-1"></div>
+        <div class="col-9">
+          <ion-range [(ngModel)]="range" min="0" max="100" color="danger" pin="true" (ionBlur) = "changeTime($event)" step="1" >
+              <ion-label range-right color="white">{{this.getDuration()}}</ion-label>
+          </ion-range>
+        </div>
+        <div class="col-2">
+          <button class="float-left cust-top-2" ion-button clear color="white" (click)="showVol()">
+            <ion-icon color="white" name="md-volume-down" large></ion-icon>
+          </button>
+        </div>
+      </div>
+      
+    </div>
+    <video id="video" (timeupdate)="updateProgressBar()" (on-ended)="songOnEnd()"></video>
+
+    <md-bottom-sheet *ngIf="showSlider">
+      <mat-slider min="1" max="100" step="1" value="1.5"></mat-slider>
+    </md-bottom-sheet>
+
+  </div>
+</ion-content>
+
